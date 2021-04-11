@@ -35,7 +35,7 @@ namespace Akvelon.TokenService.Web
             services.AddDbContext<TokenDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Default")));
 
-            //services.AddScoped<IDbContext, ApiDbContext>();
+            services.AddScoped<TokenDbContext>();
             services.AddScoped<IProcessingRequestService, ProcessingRequestService>();
             
             services.AddSwaggerGen();
