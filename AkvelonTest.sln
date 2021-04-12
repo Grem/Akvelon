@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Akvelon.TokenService.Core", "Akvelon.TokenService.Core\Akvelon.TokenService.Core.csproj", "{910AD740-1653-44B7-B1F0-1D1E7BEED148}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Akvelon.TokenService.DataLayer", "Akvelon.TokenService.DataLayer\Akvelon.TokenService.DataLayer.csproj", "{48D8ED09-AE55-4000-8424-5308E2C60C15}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Akvelon.TokenService.Web", "Akvelon.TokenService.Web\Akvelon.TokenService.Web.csproj", "{5EFACF8F-1854-4AD0-A118-80093C61F874}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Akvelon.TokenService.Services", "Akvelon.TokenService.Services\Akvelon.TokenService.Services.csproj", "{4E2CB197-58CC-476E-8838-9752CA48E26B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Akvelon.TokenService.Test", "Akvelon.TokenService.Test\Akvelon.TokenService.Test.csproj", "{55FC63CF-37BB-4D11-8FF4-5C780E65432A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{910AD740-1653-44B7-B1F0-1D1E7BEED148}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{910AD740-1653-44B7-B1F0-1D1E7BEED148}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{910AD740-1653-44B7-B1F0-1D1E7BEED148}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{910AD740-1653-44B7-B1F0-1D1E7BEED148}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48D8ED09-AE55-4000-8424-5308E2C60C15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48D8ED09-AE55-4000-8424-5308E2C60C15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48D8ED09-AE55-4000-8424-5308E2C60C15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48D8ED09-AE55-4000-8424-5308E2C60C15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5EFACF8F-1854-4AD0-A118-80093C61F874}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EFACF8F-1854-4AD0-A118-80093C61F874}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EFACF8F-1854-4AD0-A118-80093C61F874}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EFACF8F-1854-4AD0-A118-80093C61F874}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E2CB197-58CC-476E-8838-9752CA48E26B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E2CB197-58CC-476E-8838-9752CA48E26B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E2CB197-58CC-476E-8838-9752CA48E26B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E2CB197-58CC-476E-8838-9752CA48E26B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55FC63CF-37BB-4D11-8FF4-5C780E65432A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55FC63CF-37BB-4D11-8FF4-5C780E65432A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55FC63CF-37BB-4D11-8FF4-5C780E65432A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55FC63CF-37BB-4D11-8FF4-5C780E65432A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,133 @@
+﻿using System;
+using System.Threading.Tasks;
+using Akvelon.TokenService.Core.DTO;
+using Akvelon.TokenService.Core.Models;
+using Akvelon.TokenService.DataLayer.Repository;
+using Akvelon.TokenService.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
+
+namespace Akvelon.TokenService.Services.Services
+{
+    public class ProcessingRequestService : IProcessingRequestService
+    {
+        private const string Pattern = "{ph}";
+        private readonly TokenDbContext _context;
+        private readonly IHttpService _httpService;
+
+        public ProcessingRequestService(TokenDbContext context, IHttpService httpService)
+        {
+            _context = context;
+            _httpService = httpService;
+        }
+
+        #region Public
+
+        public async Task<ResultDto> ProcessingRequest(string ip, string userAgent, string token, string callback,
+            string ph)
+        {
+            var result = new ResultDto();
+            
+            if (!Validate(token)) return result;
+
+            var clickId = Guid.NewGuid();
+            var callbackUrl = ReplacePlaceHolder(callback, ph);
+            
+            var click = new Request
+            {
+                Id = clickId,
+                RequestDateTime = DateTime.UtcNow,
+                Ip = ip,
+                UserAgent = userAgent,
+                Token = token,
+                Callback = new Callback
+                {
+                    Id = clickId,
+                    CallbackUrl = callbackUrl,
+                },
+            };
+
+            await _context.Requests.AddAsync(click);
+            await _context.SaveChangesAsync();
+            
+            if (!string.IsNullOrEmpty(callbackUrl))
+                result = await ProcessingCallback(callbackUrl, clickId);
+
+            return result;
+        }
+
+        #endregion
+        
+        #region Private
+        
+        /// <summary>
+        /// Обработка вызова Url
+        /// </summary>
+        /// <param name="url">URL-адрес</param>
+        /// <param name="clickId">ID записи в БД</param>
+        private async Task<ResultDto> ProcessingCallback(string url, Guid clickId)
+        {
+            var model = await _context.Callbacks.FirstOrDefaultAsync(_ => _.Id == clickId);
+
+            var statusCode = string.Empty;
+            if (Uri.IsWellFormedUriString(url, UriKind.Absolute))
+            {
+                statusCode = await _httpService.Get(url);
+            }
+            
+            model.DateTime = DateTime.UtcNow;
+            model.HttpResponseCode = statusCode;
+
+            await _context.SaveChangesAsync();
+
+            return ToDto(model);
+        }
+
+        /// <summary>
+        /// Проверка корректности данных
+        /// </summary>
+        /// <param name="token">Токен</param>
+        private static bool Validate(string token)
+        {
+            var isEmpty = !string.IsNullOrEmpty(token);
+                
+            if (isEmpty) Console.WriteLine("No token specified!");
+
+            return isEmpty;
+        }
+
+        /// <summary>
+        /// Заменяет часть строки URL на указанный образец
+        /// </summary>
+        /// <param name="callback">URL адрес</param>
+        /// <param name="ph">Строка для замены</param>
+        private static string ReplacePlaceHolder(string callback, string ph)
+        {
+            if (string.IsNullOrEmpty(callback)) return string.Empty;
+            
+            var hasPlaceHolder = callback.IndexOf(Pattern, StringComparison.Ordinal) >= 0;
+            if (hasPlaceHolder)
+            {
+                callback = callback.Replace(Pattern, ph);
+            }
+
+            return callback;
+        }
+
+        private static ResultDto ToDto(Callback model)
+        {
+            return new ResultDto
+            {
+                Id = model.Id,
+                RequestDateTime = model.Request.RequestDateTime,
+                Token = model.Request.Token,
+                Ip = model.Request.Ip,
+                UserAgent = model.Request.UserAgent,
+                CallbackUrl = model.CallbackUrl,
+                DateTime = model.DateTime,
+                HttpResponseCode = model.HttpResponseCode,
+            };
+        }
+
+        #endregion
+    }
+}
