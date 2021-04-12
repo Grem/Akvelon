@@ -21,16 +21,31 @@ namespace Akvelon.TokenService.DataLayer.Repository
             }
         }
 
-        public virtual DbSet<Click> Clicks { get; set; }
+        public virtual DbSet<Callback> Callbacks { get; set; }
+        public virtual DbSet<Request> Requests { get; set; }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Click>(entity =>
+            modelBuilder.Entity<Request>(entity =>
             {
-                entity.ToTable("Clicks");
+                entity.ToTable("Requests");
 
                 entity.HasKey(e => e.Id)
-                    .HasName("PK_Click");
+                    .HasName("PK_Request");
+            });
+            
+            modelBuilder.Entity<Callback>(entity =>
+            {
+                entity.ToTable("Callbacks");
+
+                entity.HasIndex(e => e.Id)
+                    .HasDatabaseName("PK_CallBack")
+                    .IsUnique();
+
+                entity.HasOne(d => d.Request)
+                    .WithOne(p => p.Callback)
+                    .HasForeignKey<Callback>(d => d.Id)
+                    .HasConstraintName("FK_Request_CallBack");
             });
         }
     }

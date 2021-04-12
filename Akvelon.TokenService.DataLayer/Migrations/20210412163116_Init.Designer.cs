@@ -4,14 +4,16 @@ using Akvelon.TokenService.DataLayer.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Akvelon.TokenService.DataLayer.Migrations
 {
     [DbContext(typeof(TokenDbContext))]
-    partial class TokenDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210412163116_Init")]
+    partial class Init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Akvelon.TokenService.Core.DTO;
 
 namespace Akvelon.TokenService.Services.Interfaces
 {
@@ -13,6 +14,6 @@ namespace Akvelon.TokenService.Services.Interfaces
         /// <param name="callback">URL</param>
         /// <param name="ph">Строка для замены в URL</param>
         /// <returns>URL - если callback не пуст и удалось корректно обработать строку, иначе - пустая строка</returns>
-        Task<string> ProcessingRequest(string ip, string userAgent, string token, string callback, string ph);
+        Task<ResultDto> ProcessingRequest(string ip, string userAgent, string token, string callback, string ph);
     }
 }

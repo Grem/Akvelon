@@ -6,8 +6,8 @@ namespace Akvelon.TokenService.DataLayer.Repository
     public interface IDbContext
     {
         /// <summary>
-        /// Clicks table
+        /// Requests table
         /// </summary>
-        DbSet<Click> Clicks { get; set; }
+        DbSet<Request> Clicks { get; set; }
     }
 }

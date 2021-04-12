@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using Akvelon.TokenService.Core.DTO;
 using Akvelon.TokenService.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,14 +19,10 @@ namespace Akvelon.TokenService.Web.Controllers
         }
 
         [HttpGet("{token}")]
-        public async Task<IActionResult> Index(string token, string callback, string ph)
+        public async Task<ResultDto> Index(string token, string callback, string ph)
         {
             var (ip, userAgent) = GetDataFromRequest(Request.HttpContext);
-            var callbackUrl = await _requestService.ProcessingRequest(ip, userAgent, token, callback, ph);
-
-            if (string.IsNullOrEmpty(callbackUrl)) return Ok();
-            
-            return Redirect(callbackUrl);
+            return await _requestService.ProcessingRequest(ip, userAgent, token, callback, ph);
         }
         
         /// <summary>
