@@ -71,11 +71,10 @@ namespace Akvelon.TokenService.Services.Services
         {
             var model = await _context.Callbacks.FirstOrDefaultAsync(_ => _.Id == clickId);
 
-            var statusCode = string.Empty;
-            if (Uri.IsWellFormedUriString(url, UriKind.Absolute))
-            {
-                statusCode = await _httpService.Get(url);
-            }
+            if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
+                throw new Exception($"Wrong URL format!");
+            
+            var statusCode = await _httpService.Get(url);
             
             model.DateTime = DateTime.UtcNow;
             model.HttpResponseCode = statusCode;

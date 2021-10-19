@@ -31,9 +31,7 @@ namespace Akvelon.TokenService.Web.Filters
         /// <param name="token">Токен</param>
         private static bool Validate(string token)
         {
-            if (!string.IsNullOrEmpty(token) && token.Length == 6) return true;
-
-            return false;
+            return !string.IsNullOrEmpty(token) && token.Length == 6;
         }
     }
 }
