@@ -66,16 +66,18 @@ namespace Akvelon.TokenService.Services.Services
         /// Обработка вызова Url
         /// </summary>
         /// <param name="url">URL-адрес</param>
-        /// <param name="clickId">ID записи в БД</param>
-        private async Task<ResultDto> ProcessingCallback(string url, Guid clickId)
+        /// <param name="id">ID записи в БД</param>
+        private async Task<ResultDto> ProcessingCallback(string url, Guid id)
         {
-            var model = await _context.Callbacks.FirstOrDefaultAsync(_ => _.Id == clickId);
+            var model = await _context.Callbacks.FirstOrDefaultAsync(_ => _.Id == id);
 
-            var statusCode = string.Empty;
-            if (Uri.IsWellFormedUriString(url, UriKind.Absolute))
-            {
-                statusCode = await _httpService.Get(url);
-            }
+            if (model == null)
+                throw new Exception($"Could not find an entry in the table with ID {id}");
+            
+            if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
+                throw new Exception($"Wrong URL format!");
+            
+            var statusCode = await _httpService.Get(url);
             
             model.DateTime = DateTime.UtcNow;
             model.HttpResponseCode = statusCode;
