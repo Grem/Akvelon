@@ -27,12 +27,29 @@ namespace Akvelon.TokenService.Services.Services
         {
             var result = new ResultDto();
             
-            if (!Validate(token)) return result;
+            if (!Validate(token)) return result; // todo переделать валидацию на ActionFilter, либо на middleware компонент
 
             var clickId = Guid.NewGuid();
             var callbackUrl = ReplacePlaceHolder(callback, ph);
             
-            var click = new Request
+            var request = GetRequest(clickId, ip, userAgent, token, callbackUrl);
+
+            await _context.Requests.AddAsync(request);
+            await _context.SaveChangesAsync();
+            
+            if (!string.IsNullOrEmpty(callbackUrl))
+                result = await ProcessingCallback(callbackUrl, clickId);
+
+            return result;
+        }
+
+        #endregion
+        
+        #region Private
+
+        private static Request GetRequest(Guid clickId, string ip, string userAgent, string token, string callbackUrl)
+        {
+            return new Request
             {
                 Id = clickId,
                 RequestDateTime = DateTime.UtcNow,
@@ -45,20 +62,8 @@ namespace Akvelon.TokenService.Services.Services
                     CallbackUrl = callbackUrl,
                 },
             };
-
-            await _context.Requests.AddAsync(click);
-            await _context.SaveChangesAsync();
-            
-            if (!string.IsNullOrEmpty(callbackUrl))
-                result = await ProcessingCallback(callbackUrl, clickId);
-
-            return result;
         }
 
-        #endregion
-        
-        #region Private
-        
         /// <summary>
         /// Обработка вызова Url
         /// </summary>
@@ -88,14 +93,11 @@ namespace Akvelon.TokenService.Services.Services
         /// <param name="token">Токен</param>
         private static bool Validate(string token)
         {
-            if (!string.IsNullOrEmpty(token) || token?.Length == 6)
-            {
-                Console.WriteLine("Invalid token specified!");
-                
-                return false;
-            }
+            if (!string.IsNullOrEmpty(token) && token.Length == 6) return true;
             
-            return true;
+            Console.WriteLine("Invalid token specified!");
+                
+            return false;
         }
 
         /// <summary>
