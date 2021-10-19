@@ -22,6 +22,7 @@ namespace Akvelon.TokenService.Web.Controllers
         public async Task<ResultDto> Index(string token, string callback, string ph)
         {
             var (ip, userAgent) = GetDataFromRequest(Request.HttpContext);
+            
             return await _requestService.ProcessingRequest(ip, userAgent, token, callback, ph);
         }
         

@@ -88,11 +88,14 @@ namespace Akvelon.TokenService.Services.Services
         /// <param name="token">Токен</param>
         private static bool Validate(string token)
         {
-            var isEmpty = !string.IsNullOrEmpty(token);
+            if (!string.IsNullOrEmpty(token) || token?.Length == 6)
+            {
+                Console.WriteLine("Invalid token specified!");
                 
-            if (isEmpty) Console.WriteLine("No token specified!");
-
-            return isEmpty;
+                return false;
+            }
+            
+            return true;
         }
 
         /// <summary>
