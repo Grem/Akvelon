@@ -27,8 +27,6 @@ namespace Akvelon.TokenService.Services.Services
         {
             var result = new ResultDto();
             
-            if (!Validate(token)) return result; // todo переделать валидацию на ActionFilter, либо на middleware компонент
-
             var clickId = Guid.NewGuid();
             var callbackUrl = ReplacePlaceHolder(callback, ph);
             
@@ -85,19 +83,6 @@ namespace Akvelon.TokenService.Services.Services
             await _context.SaveChangesAsync();
 
             return ToDto(model);
-        }
-
-        /// <summary>
-        /// Проверка корректности данных
-        /// </summary>
-        /// <param name="token">Токен</param>
-        private static bool Validate(string token)
-        {
-            if (!string.IsNullOrEmpty(token) && token.Length == 6) return true;
-            
-            Console.WriteLine("Invalid token specified!");
-                
-            return false;
         }
 
         /// <summary>
