@@ -27,12 +27,27 @@ namespace Akvelon.TokenService.Services.Services
         {
             var result = new ResultDto();
             
-            if (!Validate(token)) return result;
-
             var clickId = Guid.NewGuid();
             var callbackUrl = ReplacePlaceHolder(callback, ph);
             
-            var click = new Request
+            var request = GetRequest(clickId, ip, userAgent, token, callbackUrl);
+
+            await _context.Requests.AddAsync(request);
+            await _context.SaveChangesAsync();
+            
+            if (!string.IsNullOrEmpty(callbackUrl))
+                result = await ProcessingCallback(callbackUrl, clickId);
+
+            return result;
+        }
+
+        #endregion
+        
+        #region Private
+
+        private static Request GetRequest(Guid clickId, string ip, string userAgent, string token, string callbackUrl)
+        {
+            return new Request
             {
                 Id = clickId,
                 RequestDateTime = DateTime.UtcNow,
@@ -45,20 +60,8 @@ namespace Akvelon.TokenService.Services.Services
                     CallbackUrl = callbackUrl,
                 },
             };
-
-            await _context.Requests.AddAsync(click);
-            await _context.SaveChangesAsync();
-            
-            if (!string.IsNullOrEmpty(callbackUrl))
-                result = await ProcessingCallback(callbackUrl, clickId);
-
-            return result;
         }
 
-        #endregion
-        
-        #region Private
-        
         /// <summary>
         /// Обработка вызова Url
         /// </summary>
@@ -80,19 +83,6 @@ namespace Akvelon.TokenService.Services.Services
             await _context.SaveChangesAsync();
 
             return ToDto(model);
-        }
-
-        /// <summary>
-        /// Проверка корректности данных
-        /// </summary>
-        /// <param name="token">Токен</param>
-        private static bool Validate(string token)
-        {
-            var isEmpty = !string.IsNullOrEmpty(token);
-                
-            if (isEmpty) Console.WriteLine("No token specified!");
-
-            return isEmpty;
         }
 
         /// <summary>

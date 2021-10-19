@@ -15,5 +15,9 @@
       <ProjectReference Include="..\Akvelon.TokenService.Services\Akvelon.TokenService.Services.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Middlewares" />
+    </ItemGroup>
+
 
 </Project>

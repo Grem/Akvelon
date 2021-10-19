@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Akvelon.TokenService.Core.DTO;
 using Akvelon.TokenService.Services.Interfaces;
+using Akvelon.TokenService.Web.Filters;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,15 +19,17 @@ namespace Akvelon.TokenService.Web.Controllers
             _requestService = requestService;
         }
 
+        [TokenValidation]
         [HttpGet("{token}")]
         public async Task<ResultDto> Index(string token, string callback, string ph)
         {
             var (ip, userAgent) = GetDataFromRequest(Request.HttpContext);
+            
             return await _requestService.ProcessingRequest(ip, userAgent, token, callback, ph);
         }
         
         /// <summary>
-        /// 
+        /// Возвращает IP и информацию о браузере из контекста запроса
         /// </summary>
         /// <param name="httpContext"></param>
         /// <returns></returns>
